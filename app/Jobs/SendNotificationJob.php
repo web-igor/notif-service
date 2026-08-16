@@ -24,8 +24,7 @@ class SendNotificationJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public int $tries = 3;
-    public array $backoff = [30, 60, 120];
+    public array $backoff = [10, 10];
 
     public function __construct(
         private readonly Notification $notification,

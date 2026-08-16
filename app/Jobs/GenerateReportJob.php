@@ -17,6 +17,8 @@ class GenerateReportJob implements ShouldQueue
 {
     use Queueable;
 
+    public array $backoff = [10, 10];
+
     public function __construct(
         private readonly Report $report,
         private readonly ReportService $service,

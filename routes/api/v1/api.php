@@ -16,8 +16,6 @@ Route::name('api.v1.')
             ->name('notifications.store');
         Route::get('/notifications/{notification}', [NotificationController::class, 'show'])
             ->name('notifications.show');
-        Route::patch('/notifications/{notification}', [NotificationController::class, 'updateStatus'])
-            ->name('notifications.updateStatus');
 
         Route::post('/reports', [ReportController::class, 'createAndGenerateFile'])
             ->name('reports.createAndGenerateFile');

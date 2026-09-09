@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\NotificationRepositoryInterface;
 use App\DTO\NotificationData;
-use App\Enums\ChannelTypeEnum;
 use App\Jobs\SendNotificationJob;
 use App\Models\Notification;
-use App\Models\User;
 use Exception;
 
-readonly class NotificationService
+final readonly class NotificationService
 {
+    public function __construct(
+        private NotificationRepositoryInterface $notificationRepository
+    ) {
+    }
+
     public function createAndSend(NotificationData $dto): Notification
     {
-        $notification = $this->create($dto->getDataForCreate());
-        SendNotificationJob::dispatch($notification, $this)->onQueue('notifications');
+        $notification = $this->notificationRepository->create(
+            $dto->getDataForCreate()
+        );
+
+        SendNotificationJob::dispatch($notification, $this)
+            ->onQueue($notification::QUEUE_NAME);
 
         return $notification;
     }
@@ -24,19 +32,8 @@ readonly class NotificationService
     /**
      * @throws Exception
      */
-    public function getAddress(int $recipientId, ChannelTypeEnum $channel): string
+    public function getAddress(int $recipientId): string
     {
-        $address = User::where('id', $recipientId)->value($channel->value);
-
-        if (! $address) {
-            throw new Exception('No address found for channel ' . $channel->value);
-        }
-
-        return $address;
-    }
-
-    private function create(array $data): Notification
-    {
-        return Notification::create($data);
+        return $this->notificationRepository->getAddress($recipientId);
     }
 }

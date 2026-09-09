@@ -20,6 +20,8 @@ class Notification extends Model
     use HasFactory;
     use Queueable;
 
+    public const string QUEUE_NAME = 'notifications';
+
     protected $table = 'notifications';
     protected $guarded = ['id'];
     protected $hidden = [

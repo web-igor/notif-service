@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Contracts\ReportRepositoryInterface;
 use App\Enums\ChannelTypeEnum;
 use App\Enums\NotificationStatusEnum;
-use App\Enums\ReportStatusEnum;
 use App\Jobs\GenerateReportJob;
 use App\Models\Notification;
 use App\Models\Report;
@@ -14,19 +14,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 
-readonly class ReportService
+final readonly class ReportService
 {
-    public function create(array $data): Report
+    public function createAndGenerateFile(array $data, ReportRepositoryInterface $reportRepository): Report
     {
-        return Report::create(
-            array_merge($data, ['status' => ReportStatusEnum::PENDING])
-        );
-    }
+        $report = $reportRepository->create($data);
 
-    public function createAndGenerateFile(array $data)
-    {
-        $report = $this->create($data);
-        GenerateReportJob::dispatch($report, $this)->onQueue('reports');
+        GenerateReportJob::dispatch($report, $this)
+            ->onQueue($report::QUEUE_NAME);
 
         return $report;
     }

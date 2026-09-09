@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\NotificationRepositoryInterface;
+use App\Contracts\ReportRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\Repositories\NotificationRepository;
+use App\Repositories\ReportRepository;
+use App\Repositories\UserRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +18,12 @@ use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public $bindings = [
+        UserRepositoryInterface::class         => UserRepository::class,
+        NotificationRepositoryInterface::class => NotificationRepository::class,
+        ReportRepositoryInterface::class       => ReportRepository::class,
+    ];
+
     /**
      * Register any application services.
      */

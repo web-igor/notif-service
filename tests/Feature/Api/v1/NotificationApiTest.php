@@ -28,11 +28,15 @@ class NotificationApiTest extends TestCase
 
         $response->assertStatus(201);
 
+        $expectedStatus = env('QUEUE_CONNECTION') === 'sync'
+            ? NotificationStatusEnum::SENT->value
+            : NotificationStatusEnum::PENDING->value;
+
         $this->assertDatabaseHas('notifications', [
             'recipient_id' => $user->id,
             'channel'      => ChannelTypeEnum::EMAIL->value,
             'text'         => $text,
-            'status'       => NotificationStatusEnum::PENDING->value,
+            'status'       => $expectedStatus,
         ]);
     }
 

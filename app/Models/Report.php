@@ -15,8 +15,6 @@ class Report extends Model
 {
     use HasFactory;
 
-    public const string QUEUE_NAME = 'reports';
-
     protected $table = 'reports';
     protected $guarded = ['id'];
     protected $hidden = [

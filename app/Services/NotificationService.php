@@ -11,7 +11,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Exception;
 
-readonly class NotificationService
+final readonly class NotificationService
 {
     public function createAndSend(NotificationData $dto): Notification
     {

@@ -7,15 +7,17 @@ namespace App\Jobs;
 use App\Enums\ReportStatusEnum;
 use App\Models\Report;
 use App\Services\ReportService;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Throwable;
-use Exception;
+use Illuminate\Queue\SerializesModels;
 use Log;
+use Throwable;
 
 class GenerateReportJob implements ShouldQueue
 {
     use Queueable;
+    use SerializesModels;
 
     public int $tries = 3;
     public array $backoff = [30, 60];
@@ -23,8 +25,7 @@ class GenerateReportJob implements ShouldQueue
     public function __construct(
         private readonly Report $report,
         private readonly ReportService $service,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Throwable

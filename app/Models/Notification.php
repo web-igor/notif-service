@@ -9,7 +9,6 @@ use App\Enums\NotificationStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Foundation\Queue\Queueable;
 
 /**
  * @property ChannelTypeEnum $channel
@@ -18,7 +17,6 @@ use Illuminate\Foundation\Queue\Queueable;
 class Notification extends Model
 {
     use HasFactory;
-    use Queueable;
 
     protected $table = 'notifications';
     protected $guarded = ['id'];

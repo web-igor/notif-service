@@ -7,7 +7,7 @@ namespace App\Services;
 use App\Models\Notification;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-readonly class UserService
+final readonly class UserService
 {
     public function getNotifications(int $userId, array $data): LengthAwarePaginator
     {

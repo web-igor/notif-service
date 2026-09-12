@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 
-readonly class ReportService
+final readonly class ReportService
 {
     public function create(array $data): Report
     {

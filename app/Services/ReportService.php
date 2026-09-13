@@ -9,6 +9,7 @@ use App\Enums\NotificationStatusEnum;
 use App\Enums\ReportStatusEnum;
 use App\Jobs\GenerateReportJob;
 use App\Models\Notification;
+use App\Models\Recipient;
 use App\Models\Report;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +26,9 @@ final readonly class ReportService
 
     public function createAndGenerateFile(array $data)
     {
-        $report = $this->create($data);
+        $preparedData = $this->prepareData($data);
+
+        $report = $this->create($preparedData);
         GenerateReportJob::dispatch($report, $this)->onQueue('reports');
 
         return $report;
@@ -34,7 +37,7 @@ final readonly class ReportService
     /**
      * @throws Exception
      */
-    public function generateFile(Report $report): ?string
+    public function generateFile(Report $report): string
     {
         $filePath = $this->getFilePath($report);
         $statistics = $this->getStatistics($report);
@@ -88,5 +91,14 @@ final readonly class ReportService
             ->whereBetween('created_at', [$report->from_date, $report->to_date])
             ->groupBy('channel')
             ->get();
+    }
+
+    private function prepareData(array $data): array
+    {
+        $recipientId = Recipient::where('uuid', $data['recipient_uuid'])->value('id');
+        unset($data['recipient_uuid']);
+        $data['recipient_id'] = $recipientId;
+
+        return $data;
     }
 }

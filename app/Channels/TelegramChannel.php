@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Channels;
 
 use App\Contracts\NotificationChannelInterface;
+use App\Models\Notification;
 use Log;
 
 class TelegramChannel implements NotificationChannelInterface
@@ -16,5 +17,10 @@ class TelegramChannel implements NotificationChannelInterface
          */
         Log::info("Telegram sent to {$address}: {$text}");
         return true;
+    }
+
+    public function getAddress(Notification $notification): ?string
+    {
+        return $notification->telegram;
     }
 }

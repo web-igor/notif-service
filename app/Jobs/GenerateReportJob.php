@@ -25,7 +25,8 @@ class GenerateReportJob implements ShouldQueue
     public function __construct(
         private readonly Report $report,
         private readonly ReportService $service,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws Throwable

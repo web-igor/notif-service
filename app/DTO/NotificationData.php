@@ -10,8 +10,10 @@ use App\Enums\NotificationStatusEnum;
 readonly class NotificationData
 {
     private function __construct(
-        private int $recipientId,
+        private string $recipientUuid,
         private ChannelTypeEnum $channel,
+        private ?string $email,
+        private ?string $telegram,
         private string $text
     ) {
     }
@@ -21,8 +23,10 @@ readonly class NotificationData
         $channel = ChannelTypeEnum::from($data['channel']);
 
         return new self(
-            recipientId: $data['recipient_id'],
+            recipientUuid: $data['recipient_uuid'],
             channel: $channel,
+            email: $data['email'] ?? null,
+            telegram: $data['telegram'] ?? null,
             text: $data['text']
         );
     }
@@ -30,10 +34,12 @@ readonly class NotificationData
     public function getDataForCreate(): array
     {
         return [
-            'recipient_id' => $this->recipientId,
-            'channel'      => $this->channel,
-            'text'         => $this->text,
-            'status'       => NotificationStatusEnum::PENDING,
+            'recipientUuid' => $this->recipientUuid,
+            'channel'       => $this->channel,
+            'email'         => $this->email,
+            'telegram'      => $this->telegram,
+            'text'          => $this->text,
+            'status'        => NotificationStatusEnum::PENDING,
         ];
     }
 }

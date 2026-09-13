@@ -7,21 +7,25 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('recipients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipient_id')->constrained('recipients')->cascadeOnDelete();
-            $table->date('from_date');
-            $table->date('to_date');
-            $table->string('status');
-            $table->string('file_path')->nullable();
+            $table->uuid('uuid')->unique();
             $table->timestamps();
+
+            $table->index('uuid');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('recipients');
     }
 };

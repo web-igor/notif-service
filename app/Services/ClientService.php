@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\AbilitiesEnum;
 use App\Enums\ChannelTypeEnum;
 use App\Models\Client;
 use Illuminate\Auth\AuthenticationException;
@@ -33,12 +34,13 @@ final readonly class ClientService
         $tokenName = 'token_' . bin2hex(random_bytes(16));
 
         if (empty($data['channels'])) {
-            $abilities = array_values(ChannelTypeEnum::allAbilities());
+            $abilities = array_values(AbilitiesEnum::allAbilities());
 
             $token = $client->createToken($tokenName, $abilities)->plainTextToken;
         } else {
             $abilities = array_map(function ($item) {
-                return ChannelTypeEnum::toAbility($item);
+                $ability = ChannelTypeEnum::from($item);
+                return AbilitiesEnum::toAbility($ability);
             }, $data['channels']);
 
             $token = $client->createToken($tokenName, $abilities)->plainTextToken;

@@ -10,16 +10,8 @@ use App\Enums\NotificationStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserNotificationsRequest extends FormRequest
+class RecipientNotificationsRequest extends FormRequest
 {
-    /**
-     * Для тестового опускаем авторизацию
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return [

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Models\Notification;
-use App\Models\User;
+use App\Models\Recipient;
 
 final class TestHelper
 {
-    public static function createTestUserAndNotifications(): User
+    public static function createTestUserAndNotifications(): Recipient
     {
-        $user = User::factory()->create();
+        $user = Recipient::factory()->create();
 
         Notification::factory(10)->create([
             'recipient_id' => $user->id,

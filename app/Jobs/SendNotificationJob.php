@@ -7,10 +7,9 @@ namespace App\Jobs;
 use App\Enums\NotificationStatusEnum;
 use App\Factories\ChannelFactory;
 use App\Models\Notification;
-use App\Services\NotificationService;
 use Exception;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Log;
 use Throwable;
@@ -24,8 +23,7 @@ class SendNotificationJob implements ShouldQueue
     public array $backoff = [30, 60];
 
     public function __construct(
-        private readonly Notification $notification,
-        private readonly NotificationService $service,
+        private readonly Notification $notification
     ) {
     }
 
@@ -42,9 +40,17 @@ class SendNotificationJob implements ShouldQueue
 
         try {
             $channel = ChannelFactory::make($notification->channel);
-            $recipientId = $notification->recipient_id;
-            $address = $this->service->getAddress($recipientId, $notification->channel);
-            $result = $channel->send($recipientId, $notification->text, $address);
+            $address = $channel->getAddress($notification);
+
+            if (! $address) {
+                throw new Exception('The address field cannot be null.');
+            }
+
+            $result = $channel->send(
+                $notification->recipient_id,
+                $notification->text,
+                $address
+            );
 
             if (! $result) {
                 throw new Exception('Error sending notification');

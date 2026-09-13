@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Notification;
+use App\Models\Recipient;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-final readonly class UserService
+final readonly class RecipientService
 {
-    public function getNotifications(int $userId, array $data): LengthAwarePaginator
+    public function getNotifications(int $recipientId, array $data): LengthAwarePaginator
     {
         $query = Notification::query()
-            ->where('recipient_id', $userId);
+            ->where('recipient_id', $recipientId);
 
         if (! empty($data['status'])) {
             $query->where('status', $data['status']);
@@ -27,5 +28,10 @@ final readonly class UserService
             ->paginate($data['perPage']);
 
         return $notifications;
+    }
+
+    public function getOrCreate(string $recipientUuid): Recipient
+    {
+        return Recipient::firstOrCreate(['uuid' => $recipientUuid]);
     }
 }

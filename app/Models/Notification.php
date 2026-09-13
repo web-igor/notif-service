@@ -27,7 +27,7 @@ class Notification extends Model
 
     public function recipient(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Recipient::class);
     }
 
     protected function casts(): array

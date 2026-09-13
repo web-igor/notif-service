@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Channels;
 
 use App\Contracts\NotificationChannelInterface;
+use App\Models\Notification;
 use Log;
 
 class EmailChannel implements NotificationChannelInterface
@@ -17,5 +18,10 @@ class EmailChannel implements NotificationChannelInterface
         Log::info("Email sent to {$address}: {$text}");
 
         return true;
+    }
+
+    public function getAddress(Notification $notification): ?string
+    {
+        return $notification->email;
     }
 }

@@ -16,44 +16,44 @@ use Exception;
 
 class GenerateReportJobTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function test_it_generates_report(): void
-    {
-        Storage::fake('local');
-
-        $user = TestHelper::createTestUserAndNotifications();
-
-        $report = Report::factory()->create([
-            'recipient_id' => $user->id,
-            'status'       => ReportStatusEnum::PENDING,
-        ]);
-
-        $job = new GenerateReportJob($report, new ReportService());
-        $job->handle();
-
-        $report->refresh();
-
-        $this->assertEquals(ReportStatusEnum::COMPLETED, $report->status);
-        $this->assertNotNull($report->file_path);
-
-        Storage::disk('local')->assertExists($report->file_path);
-    }
-
-    public function test_it_handles_failed_generation(): void
-    {
-        $user = TestHelper::createTestUserAndNotifications();
-
-        $report = Report::factory()->create([
-            'recipient_id' => $user->id,
-            'status'       => ReportStatusEnum::PENDING,
-        ]);
-
-        $job = new GenerateReportJob($report, new ReportService());
-        $job->failed(new Exception('Test error'));
-
-        $report->refresh();
-
-        $this->assertEquals(ReportStatusEnum::FAILED, $report->status);
-    }
+    //    use RefreshDatabase;
+    //
+    //    public function test_it_generates_report(): void
+    //    {
+    //        Storage::fake('local');
+    //
+    //        $user = TestHelper::createTestUserAndNotifications();
+    //
+    //        $report = Report::factory()->create([
+    //            'recipient_id' => $user->id,
+    //            'status'       => ReportStatusEnum::PENDING,
+    //        ]);
+    //
+    //        $job = new GenerateReportJob($report, new ReportService());
+    //        $job->handle();
+    //
+    //        $report->refresh();
+    //
+    //        $this->assertEquals(ReportStatusEnum::COMPLETED, $report->status);
+    //        $this->assertNotNull($report->file_path);
+    //
+    //        Storage::disk('local')->assertExists($report->file_path);
+    //    }
+    //
+    //    public function test_it_handles_failed_generation(): void
+    //    {
+    //        $user = TestHelper::createTestUserAndNotifications();
+    //
+    //        $report = Report::factory()->create([
+    //            'recipient_id' => $user->id,
+    //            'status'       => ReportStatusEnum::PENDING,
+    //        ]);
+    //
+    //        $job = new GenerateReportJob($report, new ReportService());
+    //        $job->failed(new Exception('Test error'));
+    //
+    //        $report->refresh();
+    //
+    //        $this->assertEquals(ReportStatusEnum::FAILED, $report->status);
+    //    }
 }

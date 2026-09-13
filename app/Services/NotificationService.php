@@ -5,34 +5,66 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DTO\NotificationData;
-use App\Enums\ChannelTypeEnum;
 use App\Jobs\SendNotificationJob;
+use App\Models\Client;
 use App\Models\Notification;
-use App\Models\User;
+use App\Models\Token;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 final readonly class NotificationService
 {
+    /**
+     * @throws AccessDeniedHttpException
+     * @throws Exception
+     */
     public function createAndSend(NotificationData $dto): Notification
     {
-        $notification = $this->create($dto->getDataForCreate());
-        SendNotificationJob::dispatch($notification, $this)->onQueue('notifications');
+        $data = $dto->getDataForCreate();
+        $recipientUuid = $data['recipientUuid'];
+        unset($data['recipientUuid']);
 
-        return $notification;
+        DB::beginTransaction();
+        try {
+            $recipientService = app(RecipientService::class);
+            $recipient = $recipientService->getOrCreate($recipientUuid);
+            $data['recipient_id'] = $recipient->id;
+            $notification = $this->create($data);
+
+            DB::commit();
+
+            $this->tokenRightsCheck($notification);
+            SendNotificationJob::dispatch($notification)->onQueue('notifications');
+
+            return $notification;
+
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
     }
 
     /**
-     * @throws Exception
+     * @throws AccessDeniedHttpException
      */
-    public function getAddress(int $recipientId, ChannelTypeEnum $channel): string
+    private function tokenRightsCheck(Notification $notification): void
     {
-        $address = User::where('id', $recipientId)->value($channel->value);
+        /**
+         * @var Client $client
+         */
+        $client = request()->user();
+        $token = $client->currentAccessToken();
 
-        if (! $address) {
-            throw new Exception('No address found for channel ' . $channel->value);
+        if (! $token instanceof Token) {
+            throw new AccessDeniedHttpException('The token must belong to the Token class.');
         }
 
-        return $address;
+        if (! in_array($notification->channel->value, $token->channels, true)) {
+            throw new AccessDeniedHttpException(
+                'Token does not have permission to send via this channel.'
+            );
+        }
     }
 
     private function create(array $data): Notification

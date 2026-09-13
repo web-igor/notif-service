@@ -85,5 +85,4 @@ return [
         'encrypt_cookies'      => EncryptCookies::class,
         'validate_csrf_token'  => ValidateCsrfToken::class,
     ],
-
 ];

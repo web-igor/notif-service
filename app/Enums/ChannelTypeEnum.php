@@ -17,27 +17,11 @@ enum ChannelTypeEnum: string
         ];
     }
 
-    public static function allAbilities(): array
-    {
-        return [
-            self::EMAIL->value    => 'notifications:send-email',
-            self::TELEGRAM->value => 'notifications:send-telegram',
-        ];
-    }
-
-    public static function toAbility(string $channel): string
-    {
-        return match ($channel) {
-            self::EMAIL->value    => 'notifications:send-email',
-            self::TELEGRAM->value => 'notifications:send-telegram',
-        };
-    }
-
-    public static function fromAbility(string $ability): string
+    public static function fromAbility(AbilitiesEnum $ability): string
     {
         return match ($ability) {
-            'notifications:send-email'    => self::EMAIL->value,
-            'notifications:send-telegram' => self::TELEGRAM->value,
+            AbilitiesEnum::SEND_EMAIL    => self::EMAIL->value,
+            AbilitiesEnum::SEND_TELEGRAM => self::TELEGRAM->value,
         };
     }
 }

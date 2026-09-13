@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class Client extends Authenticatable
+class Client extends Model implements AuthenticatableContract
 {
+    use Authenticatable;
     use HasApiTokens;
 
     protected $table = 'clients';

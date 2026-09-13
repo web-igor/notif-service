@@ -17,6 +17,7 @@ class ReportController extends Controller
     public function createAndGenerateFile(ReportRequest $request, ReportService $service): ReportResource
     {
         $report = $service->createAndGenerateFile($request->validated());
+
         return ReportResource::make($report);
     }
 

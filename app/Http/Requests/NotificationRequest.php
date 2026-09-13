@@ -14,9 +14,19 @@ class NotificationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'channel'      => ['required', 'string', Rule::enum(ChannelTypeEnum::class)],
-            'recipient_id' => 'required|int|exists:users,id',
-            'text'         => 'required|string|max:500',
+            'recipient_uuid' => 'required|uuid',
+            'channel'        => ['required', 'string', Rule::enum(ChannelTypeEnum::class)],
+            'email'          => [
+                'exclude_if:channel,' . ChannelTypeEnum::TELEGRAM->value,
+                'required_if:channel,' . ChannelTypeEnum::EMAIL->value,
+                'email',
+            ],
+            'telegram' => [
+                'exclude_if:channel,' . ChannelTypeEnum::EMAIL->value,
+                'required_if:channel,' . ChannelTypeEnum::TELEGRAM->value,
+                'string',
+            ],
+            'text' => 'required|string|max:500',
         ];
     }
 

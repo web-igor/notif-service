@@ -40,7 +40,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Providers
+    | Recipient Providers
     |--------------------------------------------------------------------------
     |
     | The "clients" provider uses the Client model, which represents

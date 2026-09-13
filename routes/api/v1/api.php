@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\RecipientController;
 use App\Http\Controllers\Client\ClientController;
 
 Route::name('api.v1.')
@@ -23,8 +23,8 @@ Route::name('api.v1.')
             Route::get('/revoke-all-tokens', [ClientController::class, 'revokeAllTokens'])
                 ->name('revoke-all-tokens');
 
-            Route::get('/users/{user}/notifications', [UserController::class, 'getUserNotifications'])
-                ->name('user.getUserNotifications');
+            Route::get('/recipients/{recipientUuid}/notifications', [RecipientController::class, 'getNotifications'])
+                ->name('recipients.getNotifications');
 
             Route::post('/notifications', [NotificationController::class, 'store'])
                 ->name('notifications.store');

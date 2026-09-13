@@ -43,21 +43,33 @@ class ClientController extends Controller
 
     public function tokens(): AnonymousResourceCollection
     {
-        $tokens = request()->user()->tokens()->get();
+        /**
+         * @var Client $client
+         */
+        $client = request()->user();
+        $tokens = $client->tokens()->get();
 
         return TokenResource::collection($tokens);
     }
 
     public function revokeToken(): JsonResponse
     {
-        $token = request()->user()->currentAccessToken();
+        /**
+         * @var Client $client
+         */
+        $client = request()->user();
+        $token = $client->currentAccessToken();
 
         return response()->json(['success' => $token->delete()]);
     }
 
     public function revokeAllTokens(): JsonResponse
     {
-        $tokens = request()->user()->tokens();
+        /**
+         * @var Client $client
+         */
+        $client = request()->user();
+        $tokens = $client->tokens();
 
         return response()->json([
             'success'       => true,

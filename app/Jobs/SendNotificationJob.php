@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Enums\NotificationStatusEnum;
 use App\Factories\ChannelFactory;
+use App\Models\Client;
 use App\Models\Notification;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,6 +40,10 @@ class SendNotificationJob implements ShouldQueue
         }
 
         try {
+            /**
+             * @var Client $client
+             */
+            $client = $notification->client;
             $channel = ChannelFactory::make($notification->channel);
             $address = $channel->getAddress($notification);
 
@@ -46,15 +51,11 @@ class SendNotificationJob implements ShouldQueue
                 throw new Exception('The address field cannot be null.');
             }
 
-            $result = $channel->send(
-                $notification->recipient_id,
+            $channel->send(
+                $client->name,
                 $notification->text,
                 $address
             );
-
-            if (! $result) {
-                throw new Exception('Error sending notification');
-            }
 
             $notification->update(['status' => NotificationStatusEnum::SENT]);
 

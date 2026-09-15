@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recipient extends Model
 {
@@ -15,14 +14,4 @@ class Recipient extends Model
         'created_at',
         'updated_at',
     ];
-
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class);
-    }
-
-    public function reports(): HasMany
-    {
-        return $this->hasMany(Report::class);
-    }
 }

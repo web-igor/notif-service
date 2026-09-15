@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class Client extends Model implements AuthenticatableContract
@@ -21,6 +22,11 @@ class Client extends Model implements AuthenticatableContract
         'created_at',
         'updated_at',
     ];
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
 
     protected function casts(): array
     {

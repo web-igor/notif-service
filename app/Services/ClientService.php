@@ -39,8 +39,8 @@ final readonly class ClientService
             $token = $client->createToken($tokenName, $abilities)->plainTextToken;
         } else {
             $abilities = array_map(function ($item) {
-                $ability = ChannelTypeEnum::from($item);
-                return AbilitiesEnum::toAbility($ability);
+                $channel = ChannelTypeEnum::from($item);
+                return AbilitiesEnum::fromChannel($channel);
             }, $data['channels']);
 
             $token = $client->createToken($tokenName, $abilities)->plainTextToken;

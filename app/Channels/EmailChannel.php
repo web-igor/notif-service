@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace App\Channels;
 
 use App\Contracts\NotificationChannelInterface;
+use App\Mail\Email;
 use App\Models\Notification;
-use Log;
+use Illuminate\Support\Facades\Mail;
 
 class EmailChannel implements NotificationChannelInterface
 {
-    public function send(int $recipientId, string $text, string $address): bool
+    public function send(string $senderName, string $text, string $address): void
     {
-        /**
-         * Заглушка. В реальности тут должна быть отправка уведомления по Email
-         */
-        Log::info("Email sent to {$address}: {$text}");
-
-        return true;
+        Mail::to([$address])->send(new Email($senderName, $text));
     }
 
     public function getAddress(Notification $notification): ?string

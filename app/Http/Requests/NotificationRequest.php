@@ -21,10 +21,10 @@ class NotificationRequest extends FormRequest
                 'required_if:channel,' . ChannelTypeEnum::EMAIL->value,
                 'email',
             ],
-            'telegram' => [
+            'telegram_chat_id' => [
                 'exclude_if:channel,' . ChannelTypeEnum::EMAIL->value,
                 'required_if:channel,' . ChannelTypeEnum::TELEGRAM->value,
-                'string',
+                'integer',
             ],
             'text' => 'required|string|max:500',
         ];

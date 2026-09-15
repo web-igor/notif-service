@@ -37,4 +37,8 @@ return [
         ],
     ],
 
+    'telegram' => [
+        'api_domen' => env('TELEGRAM_API_DOMEN', 'https://api.telegram.org/bot'),
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
 ];

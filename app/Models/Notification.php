@@ -25,9 +25,9 @@ class Notification extends Model
         'updated_at',
     ];
 
-    public function recipient(): BelongsTo
+    public function client(): BelongsTo
     {
-        return $this->belongsTo(Recipient::class);
+        return $this->belongsTo(Client::class);
     }
 
     protected function casts(): array

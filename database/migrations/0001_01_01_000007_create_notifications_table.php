@@ -12,9 +12,10 @@ return new class () extends Migration {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('recipient_id')->constrained('recipients')->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
             $table->string('channel');
             $table->string('email')->nullable();
-            $table->string('telegram')->nullable();
+            $table->string('telegram_chat_id')->nullable();
             $table->string('status');
             $table->text('text');
             $table->timestamps();

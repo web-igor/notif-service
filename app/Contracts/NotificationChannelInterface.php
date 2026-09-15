@@ -8,7 +8,7 @@ use App\Models\Notification;
 
 interface NotificationChannelInterface
 {
-    public function send(int $recipientId, string $text, string $address): bool;
+    public function send(string $senderName, string $text, string $address): void;
 
     public function getAddress(Notification $notification): ?string;
 }

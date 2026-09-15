@@ -16,8 +16,6 @@ return new class () extends Migration {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->timestamps();
-
-            $table->index('uuid');
         });
     }
 

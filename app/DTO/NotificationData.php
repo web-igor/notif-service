@@ -13,7 +13,7 @@ readonly class NotificationData
         private string $recipientUuid,
         private ChannelTypeEnum $channel,
         private ?string $email,
-        private ?string $telegram,
+        private ?string $telegramChatId,
         private string $text
     ) {
     }
@@ -26,7 +26,7 @@ readonly class NotificationData
             recipientUuid: $data['recipient_uuid'],
             channel: $channel,
             email: $data['email'] ?? null,
-            telegram: $data['telegram'] ?? null,
+            telegramChatId: ! empty($data['telegram_chat_id']) ? (string) $data['telegram_chat_id'] : null,
             text: $data['text']
         );
     }
@@ -34,12 +34,12 @@ readonly class NotificationData
     public function getDataForCreate(): array
     {
         return [
-            'recipientUuid' => $this->recipientUuid,
-            'channel'       => $this->channel,
-            'email'         => $this->email,
-            'telegram'      => $this->telegram,
-            'text'          => $this->text,
-            'status'        => NotificationStatusEnum::PENDING,
+            'recipientUuid'    => $this->recipientUuid,
+            'channel'          => $this->channel,
+            'email'            => $this->email,
+            'telegram_chat_id' => $this->telegramChatId,
+            'text'             => $this->text,
+            'status'           => NotificationStatusEnum::PENDING,
         ];
     }
 }

@@ -6,21 +6,25 @@ namespace App\Channels;
 
 use App\Contracts\NotificationChannelInterface;
 use App\Models\Notification;
-use Log;
+use Illuminate\Support\Facades\Http;
 
 class TelegramChannel implements NotificationChannelInterface
 {
-    public function send(int $recipientId, string $text, string $address): bool
+    public function send(string $senderName, string $text, string $address): void
     {
-        /**
-         * Заглушка. В реальности тут должна быть отправка уведомления в Telegram
-         */
-        Log::info("Telegram sent to {$address}: {$text}");
-        return true;
+        $apiDomen = config('services.telegram.api_domen');
+        $botToken = config('services.telegram.bot_token');
+
+        $url = "{$apiDomen}{$botToken}";
+
+        Http::post($url . '/sendMessage', [
+            'chat_id' => $address,
+            'text'    => $text,
+        ]);
     }
 
     public function getAddress(Notification $notification): ?string
     {
-        return $notification->telegram;
+        return $notification->telegram_chat_id;
     }
 }

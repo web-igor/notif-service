@@ -17,7 +17,7 @@ enum AbilitiesEnum: string
         ];
     }
 
-    public static function toAbility(ChannelTypeEnum $channel): string
+    public static function fromChannel(ChannelTypeEnum $channel): string
     {
         return match ($channel) {
             ChannelTypeEnum::EMAIL    => self::SEND_EMAIL->value,

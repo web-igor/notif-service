@@ -27,9 +27,15 @@ final readonly class NotificationService
 
         DB::beginTransaction();
         try {
+            /**
+             * @var Client $client
+             */
+            $client = request()->user();
             $recipientService = app(RecipientService::class);
             $recipient = $recipientService->getOrCreate($recipientUuid);
             $data['recipient_id'] = $recipient->id;
+            $data['client_id'] = $client->id;
+
             $notification = $this->create($data);
 
             DB::commit();

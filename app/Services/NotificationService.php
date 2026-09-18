@@ -19,20 +19,13 @@ final readonly class NotificationService
      * @throws AccessDeniedHttpException
      * @throws Exception
      */
-    public function createAndSend(NotificationData $dto): Notification
+    public function createAndSend(NotificationData $dto, Client $client): Notification
     {
-        $data = $dto->getDataForCreate();
-        $recipientUuid = $data['recipientUuid'];
-        unset($data['recipientUuid']);
-
         DB::beginTransaction();
         try {
-            /**
-             * @var Client $client
-             */
-            $client = request()->user();
             $recipientService = app(RecipientService::class);
-            $recipient = $recipientService->getOrCreate($recipientUuid);
+            $data = $dto->getDataForCreate();
+            $recipient = $recipientService->getOrCreate($data['recipientUuid']);
             $data['recipient_id'] = $recipient->id;
             $data['client_id'] = $client->id;
 

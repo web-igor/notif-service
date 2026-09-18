@@ -9,7 +9,7 @@ use App\Enums\NotificationStatusEnum;
 
 readonly class NotificationData
 {
-    private function __construct(
+    public function __construct(
         private string $recipientUuid,
         private ChannelTypeEnum $channel,
         private ?string $email,

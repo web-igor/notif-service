@@ -19,12 +19,13 @@ class NotificationFactory extends Factory
     public function definition(): array
     {
         $channels = array_column(ChannelTypeEnum::cases(), 'value');
-        $statuses = array_column(NotificationStatusEnum::cases(), 'value');
 
         return [
-            'channel' => fake()->randomElement($channels),
-            'status'  => fake()->randomElement($statuses),
-            'text'    => fake()->text(500),
+            'channel'          => fake()->randomElement($channels),
+            'status'           => NotificationStatusEnum::PENDING->value,
+            'email'            => fake()->email,
+            'telegram_chat_id' => (string) fake()->randomNumber(9, true),
+            'text'             => fake()->text(500),
         ];
     }
 }

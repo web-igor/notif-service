@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use App\Models\Notification;
-use App\Models\Recipient;
+use App\Enums\AbilitiesEnum;
+use App\Models\Client;
 
 final class TestHelper
 {
-    public static function createTestUserAndNotifications(): Recipient
+    public static function createClientAndAuthToken(): array
     {
-        $user = Recipient::factory()->create();
+        $client = Client::factory()->create();
 
-        Notification::factory(10)->create([
-            'recipient_id' => $user->id,
-            'created_at'   => now()->format('Y-m-d'),
-        ]);
+        $token = $client->createToken(
+            'test-token',
+            [AbilitiesEnum::SEND_EMAIL->value]
+        );
 
-        return $user;
+        return [$client, $token->plainTextToken];
     }
 }

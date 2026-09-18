@@ -13,7 +13,7 @@ class NotificationController extends Controller
 {
     public function store(NotificationRequest $request, NotificationService $service): NotificationResource
     {
-        $notification = $service->createAndSend($request->toDTO());
+        $notification = $service->createAndSend($request->toDTO(), request()->user());
         return NotificationResource::make($notification);
     }
 

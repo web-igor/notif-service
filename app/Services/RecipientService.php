@@ -8,7 +8,7 @@ use App\Models\Notification;
 use App\Models\Recipient;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-final readonly class RecipientService
+class RecipientService
 {
     public function getNotifications(int $recipientId, array $data): LengthAwarePaginator
     {

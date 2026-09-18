@@ -12,17 +12,17 @@ use Tests\TestCase;
 
 class ChannelFactoryTest extends TestCase
 {
-    //    public function test_it_creates_email_channel(): void
-    //    {
-    //        $channel = ChannelFactory::make(ChannelTypeEnum::EMAIL);
-    //
-    //        $this->assertInstanceOf(EmailChannel::class, $channel);
-    //    }
-    //
-    //    public function test_it_creates_telegram_channel(): void
-    //    {
-    //        $channel = ChannelFactory::make(ChannelTypeEnum::TELEGRAM);
-    //
-    //        $this->assertInstanceOf(TelegramChannel::class, $channel);
-    //    }
+    public function test_it_creates_email_channel(): void
+    {
+        $channel = ChannelFactory::make(ChannelTypeEnum::EMAIL);
+
+        $this->assertInstanceOf(EmailChannel::class, $channel);
+    }
+
+    public function test_it_creates_telegram_channel(): void
+    {
+        $channel = ChannelFactory::make(ChannelTypeEnum::TELEGRAM);
+
+        $this->assertInstanceOf(TelegramChannel::class, $channel);
+    }
 }

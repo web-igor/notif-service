@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     postgresql-client-17 \
     cron \
-    ffmpeg
+    ffmpeg \
+    supervisor
 
 # Очистка кэша apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -48,6 +49,7 @@ RUN pecl install redis \
 
 # Копирование конфигурационных файлов
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./docker/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer

@@ -46,12 +46,13 @@ services:
       - QUEUE_CONNECTION=${QUEUE_CONNECTION}
       - REDIS_HOST=${REDIS_HOST}
     entrypoint: []
-    command: php artisan horizon
-    healthcheck:
-        test: [ "CMD", "php", "artisan", "horizon:status" ]
-        interval: 30s
-        timeout: 10s
-        retries: 3
+    command: supervisord -c /etc/supervisor/conf.d/supervisor.conf -n
+#    command: php artisan horizon
+#    healthcheck:
+#        test: [ "CMD", "php", "artisan", "horizon:status" ]
+#        interval: 30s
+#        timeout: 10s
+#        retries: 3
     depends_on:
       - laravel
       - redis

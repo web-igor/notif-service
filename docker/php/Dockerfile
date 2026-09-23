@@ -48,7 +48,9 @@ RUN pecl install redis \
     && docker-php-ext-enable redis
 
 # Копирование конфигурационных файлов
+# OPcache уже встроен в php:8.5-fpm, отдельный docker-php-ext-install ему не нужен.
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./docker/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 # Установка Composer
